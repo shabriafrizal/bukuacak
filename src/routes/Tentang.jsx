@@ -73,6 +73,18 @@ function Tentang() {
             pengembang, atau pendukung, kontribusi Anda membantu kami untuk
             terus berkembang.
           </p>
+          <div className="flex justify-center mt-12">
+            <a
+              target="_blank"
+              href="https://github.com/shabriafrizal/bukuacak"
+              className="relative inline-flex items-center justify-start px-6 py-3 overflow-hidden font-medium transition-all bg-light1 rounded-lg hover:bg-bluesea group disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="w-48 h-48 rounded rotate-[-40deg] bg-bluesea absolute bottom-0 left-0 -translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
+              <span className="relative min-w-[250px] md:min-w-[650px] lg:min-w-[800px] text-black transition-colors duration-300 ease-in-out group-hover:text-light1 text-center">
+                Github repository
+              </span>
+            </a>
+          </div>
         </div>
         <div className="w-full h-[1px] mt-8 mb-20 bg-light1/5"></div>
       </div>
