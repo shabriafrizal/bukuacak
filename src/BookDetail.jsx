@@ -29,8 +29,9 @@ const BookDetail = ({
         <div className="flex flex-col h-full transition-all duration-300">
           <p className="text-light1 mb-4 text-4xl font-bold">{price}</p>
           <p className="text-light1/50 mb-2 text-lg">Genre: {genre}</p>
+          <p className="text-light1/50 mb-2 text-lg">Penerbit: {publisher}</p>
           <p className="text-light1/50 mb-2 text-lg">
-            Penerbit: {publisher}
+            Diterbitkan: {published_date}
           </p>
           <p className="text-light1/50 mb-2 text-lg">
             Jumlah Halaman: {total_pages}
