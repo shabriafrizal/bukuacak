@@ -11,6 +11,7 @@ function Detail() {
     title: "",
     author: "",
     genre: "",
+    publisher: "",
     cover: "",
     store: "",
     textStore: "",
@@ -45,6 +46,7 @@ function Detail() {
           author: data.author?.name || "Author tidak diketahui",
           description: data.summary || "Tidak ada deskripsi",
           genre: data.category?.name || "Tidak ada genre",
+          publisher: data.publisher || "Penerbit tidak diketahui",
           cover: data.cover_image || "/bukuacak.png",
           textStore: data.buy_links?.[0]?.store || "Check Online",
           store: data.buy_links?.[0]?.url || "#",
@@ -121,6 +123,7 @@ function Detail() {
           published_date={book.published_date}
           size={book.size}
           format={book.format}
+          publisher={book.publisher}
           price={book.price}
           total_pages={book.total_pages}
         />

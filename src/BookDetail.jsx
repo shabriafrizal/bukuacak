@@ -8,6 +8,7 @@ const BookDetail = ({
   storeLink = "",
   textStore = "",
   published_date = "",
+  publisher = "",
   total_pages = "",
   isbn = "",
   size = "",
@@ -29,7 +30,7 @@ const BookDetail = ({
           <p className="text-light1 mb-4 text-4xl font-bold">{price}</p>
           <p className="text-light1/50 mb-2 text-lg">Genre: {genre}</p>
           <p className="text-light1/50 mb-2 text-lg">
-            Tanggal Diterbitkan: {published_date}
+            Penerbit: {publisher}
           </p>
           <p className="text-light1/50 mb-2 text-lg">
             Jumlah Halaman: {total_pages}
