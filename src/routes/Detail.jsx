@@ -55,6 +55,7 @@ function Detail() {
           format: data.details?.format || "Format tidak diketahui",
           price: data.details?.price || "Harga tidak diketahui",
           total_pages: data.details?.total_pages || "Jumlah tidak diketahui",
+          book_link: data.book_link || false,
           published_date:
             data.details?.published_date || "Tanggal tidak diketahui",
         });
@@ -126,6 +127,7 @@ function Detail() {
           publisher={book.publisher}
           price={book.price}
           total_pages={book.total_pages}
+          book_link={book.book_link}
         />
         <div className="w-full h-[1px] mt-8 mb-8 bg-light1/5"></div>
       </div>

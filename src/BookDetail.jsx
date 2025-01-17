@@ -14,6 +14,7 @@ const BookDetail = ({
   size = "",
   format = "",
   price = "",
+  book_link = false,
 }) => {
   return (
     <div>
@@ -38,7 +39,26 @@ const BookDetail = ({
           </p>
           <p className="text-light1/50 mb-2 text-lg">ISBN: {isbn}</p>
           <p className="text-light1/50 mb-2 text-lg">Ukuran: {size}</p>
-          <p className="text-light1/50 mb-2 text-lg">format: {format}</p>
+          <p className="text-light1/50 mb-2 text-lg">
+            format: {format}{" "}
+            {book_link && (
+              <button
+                className="bg-primary text-white active:bg-secondary font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                type="button "
+                onClick={() => window.open(book_link, "_blank")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+              </button>
+            )}
+          </p>
           <div className="w-full h-[1px] mt-8 mb-8 bg-light1/5"></div>
           <div className="mt-auto">
             <a

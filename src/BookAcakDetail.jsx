@@ -72,7 +72,7 @@ const BookAcakDetail = ({
       >
         <div className="mb-3">
           <h2 className="text-lg text-light1/50">{author}</h2>
-          <h1 className="text-3xl font-bold text-light1">{title}</h1>
+          <h1   className="text-3xl font-bold text-light1">{title}</h1>
         </div>
 
         <p className="text-light1/50 mb-2">Genre: {genre}</p>
