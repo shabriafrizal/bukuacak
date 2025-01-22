@@ -3,44 +3,44 @@ const ApiDocumentation = () => {
     {
       title: "Get Books with Filters",
       method: "GET",
-      url: "bukuacak-9bdcb4ef2605.herokuapp.com/book?sort={urut}&page={angka}&year={tahun}&genre={genre}&keyword={kata kunci}",
+      url: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?sort={urut}&page={angka}&year={tahun}&genre={genre}&keyword={kata kunci}",
       description:
         "Mengambil daftar buku berdasarkan filter yang diberikan seperti urutan, halaman, tahun, genre, dan kata kunci. Urutan antara lain newest, oldest, titleAZ, titleZA, priceLowHigh, dan priceHighLow",
       example:
-        "bukuacak-9bdcb4ef2605.herokuapp.com/book?page=1&year=2023&genre=Self-Improvement&keyword=Berani",
+        "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?page=1&year=2023&genre=Self-Improvement&keyword=Berani",
     },
     {
       title: "Get Book by _ID",
       method: "GET",
-      url: "bukuacak-9bdcb4ef2605.herokuapp.com/book/{_id}",
+      url: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book/{_id}",
       description: "Mengambil detail buku berdasarkan ID buku.",
       example:
-        "bukuacak-9bdcb4ef2605.herokuapp.com/book/6780fe7e1e0f1c11c617c2a2",
+        "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book/6780fe7e1e0f1c11c617c2a2",
     },
     {
       title: "Get Book by Query Parameter",
       method: "GET",
-      url: "bukuacak-9bdcb4ef2605.herokuapp.com/book?_id={_id}",
+      url: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?_id={_id}",
       description:
         "Mengambil detail buku dengan ID yang diberikan sebagai query parameter.",
       example:
-        "bukuacak-9bdcb4ef2605.herokuapp.com/book?_id=67822def79bd51cee772b4dc",
+        "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book?_id=67822def79bd51cee772b4dc",
     },
     {
       title: "Get Random Book",
       method: "GET",
-      url: "bukuacak-9bdcb4ef2605.herokuapp.com/random_book?year={tahun}&genre={genre}&keyword={kata kunci}",
+      url: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/random_book?year={tahun}&genre={genre}&keyword={kata kunci}",
       description:
         "Mengambil buku secara acak dengan filter opsional seperti tahun, genre, dan kata kunci.",
       example:
-        "bukuacak-9bdcb4ef2605.herokuapp.com/random_book?year=2023&genre=mystery&keyword=detective",
+        "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/random_book?year=2023&genre=mystery&keyword=detective",
     },
     {
       title: "Get Genre Statistics",
       method: "GET",
-      url: "bukuacak-9bdcb4ef2605.herokuapp.com/stats/genre",
+      url: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/stats/genre",
       description: "Mengambil statistik jumlah buku berdasarkan genre.",
-      example: "bukuacak-9bdcb4ef2605.herokuapp.com/stats/genre",
+      example: "bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/stats/genre",
     },
   ];
 

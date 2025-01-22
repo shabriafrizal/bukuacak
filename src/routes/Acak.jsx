@@ -29,7 +29,7 @@ function Acak() {
     const fetchGenres = async () => {
       try {
         const response = await fetch(
-          "https://bukuacak-9bdcb4ef2605.herokuapp.com/stats/genre"
+          "https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/stats/genre"
         );
         const data = await response.json();
         setGenres(data.genre_statistics);
@@ -45,7 +45,8 @@ function Acak() {
     setBlurTrigger((prev) => !prev);
 
     try {
-      let url = "https://bukuacak-9bdcb4ef2605.herokuapp.com/random_book";
+      let url =
+        "https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/random_book";
       const params = new URLSearchParams();
 
       if (selectedKeyword) params.append("keyword", selectedKeyword);

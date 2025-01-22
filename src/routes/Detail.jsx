@@ -31,7 +31,7 @@ function Detail() {
       setError(null);
 
       try {
-        const url = `https://bukuacak-9bdcb4ef2605.herokuapp.com/book/${id}`;
+        const url = `https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book/${id}`;
         const response = await fetch(url);
 
         if (!response.ok) {

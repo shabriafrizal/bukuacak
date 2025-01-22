@@ -71,7 +71,9 @@ function Buku() {
   const fetchBooks = async () => {
     setIsLoading(true);
     try {
-      const url = new URL("https://bukuacak-9bdcb4ef2605.herokuapp.com/book");
+      const url = new URL(
+        "https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/book"
+      );
 
       // Add all search params to URL
       searchParams.forEach((value, key) => {
@@ -110,7 +112,7 @@ function Buku() {
   const fetchGenres = async () => {
     try {
       const response = await fetch(
-        "https://bukuacak-9bdcb4ef2605.herokuapp.com/stats/genre"
+        "https://bukuacak-9bdcb4ef2605.herokuapp.com/api/v1/stats/genre"
       );
       const data = await response.json();
       setGenres(data.genre_statistics);
