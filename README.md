@@ -1,7 +1,8 @@
 
 # Bukuacak
 
-Bukuacak is a simple and efficient API for accessing book data, offering various features such as filtering, sorting, and getting random books. This repository contains the front-end setup for displaying and interacting with the Bukuacak API.
+Bukuacak is a simple and efficient app for accessing book data, offering various features such as filtering, sorting, and getting random books. This repository contains the front-end setup for displaying and interacting with the Bukuacak API.
+[View Bukuacak-api](https://github.com/shabriafrizal/bukuacak-api)
 
 ## Features
 
