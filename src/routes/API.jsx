@@ -1,8 +1,15 @@
 import ApiDocumentation from "../ApiDocumentation";
+import Seo from "../Seo";
 
 function API() {
   return (
     <section className="container mx-auto p-5 mt-20">
+      <Seo
+        title="Dokumentasi API"
+        description="API Bukuacak gratis dan terbuka: ambil daftar buku, detail buku, buku acak, dan statistik genre dalam format JSON."
+        path="/api"
+        keywords={["api buku", "api gratis", "bukuacak api", "rest api buku"]}
+      />
       <div>
         <div className="rounded-lg max-w-4xl mx-auto">
           <h1 className="font-semibold text-3xl mb-2">API</h1>

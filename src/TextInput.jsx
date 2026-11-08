@@ -45,7 +45,7 @@ const TextInput = forwardRef(
       if (setValue && debouncedValue !== value) {
         setValue(debouncedValue);
       }
-    }, [debouncedValue]);
+    }, [debouncedValue, setValue, value]);
 
     const handleChange = (e) => {
       setLocalValue(e.target.value);
@@ -73,7 +73,7 @@ const TextInput = forwardRef(
             required={required}
             name={name}
             id={id || name}
-            className={`bg-gray-700 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 text-left dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${className}`}
+            className={`bg-gray-700 border border-gray-300 text-light1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 text-left placeholder:text-light1/40 ${className}`}
             {...props}
           />
         </div>

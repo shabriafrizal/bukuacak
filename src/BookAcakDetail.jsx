@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+const FALLBACK_COVER = "/bukuacak_w.png";
 
 const BookAcakDetail = ({
   id = "",
@@ -15,18 +17,19 @@ const BookAcakDetail = ({
 }) => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
+  const [imageSrc, setImageSrc] = useState(cover || FALLBACK_COVER);
   const truncatedDescription = description?.slice(0, 200);
   const shouldTruncate = description?.length > 200;
-  const navigate = useNavigate();
 
-  const handleDetailClick = () => {
-    navigate(`/buku/${id}`);
-  };
-
-  // Reset blur state when blurTrigger changes
+  // Reset the reveal + collapsed description when a new book arrives
   useEffect(() => {
     setIsRevealed(false);
-  }, [blurTrigger]);
+    setShowFullDescription(false);
+  }, [blurTrigger, id]);
+
+  useEffect(() => {
+    setImageSrc(cover || FALLBACK_COVER);
+  }, [cover]);
 
   if (isLoading) {
     return (
@@ -57,12 +60,26 @@ const BookAcakDetail = ({
           !isRevealed ? "blur-lg" : ""
         }`}
       >
-        <img
-          onClick={handleDetailClick}
-          src={cover}
-          alt="Book Cover"
-          className="cursor-pointer w-3/5 h-auto object-contain object-top"
-        />
+        <Link
+          to={id ? `/buku/${id}` : "/buku"}
+          aria-label={
+            title ? `Lihat detail buku ${title}` : "Lihat detail buku"
+          }
+          className="block w-3/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-light2 rounded"
+        >
+          <img
+            src={imageSrc}
+            alt={title ? `Sampul buku ${title}` : "Sampul buku"}
+            width="300"
+            height="400"
+            className={
+              imageSrc === FALLBACK_COVER
+                ? "w-1/2 mx-auto max-h-[320px] opacity-40 object-contain object-top"
+                : "w-full h-auto object-contain object-top"
+            }
+            onError={() => setImageSrc(FALLBACK_COVER)}
+          />
+        </Link>
       </div>
 
       <div
@@ -72,41 +89,51 @@ const BookAcakDetail = ({
       >
         <div className="mb-3">
           <h2 className="text-lg text-light1/50">{author}</h2>
-          <h1   className="text-3xl font-bold text-light1">{title}</h1>
+          <h1 className="text-3xl font-bold text-light1">{title}</h1>
         </div>
 
         <p className="text-light1/50 mb-2">Genre: {genre}</p>
         <div className="flex-grow mb-6">
-          <p className="text-light1/25">
+          <p className="text-light1/70">
             {showFullDescription ? description : truncatedDescription}
             {shouldTruncate && !showFullDescription && "..."}
           </p>
           {shouldTruncate && (
             <button
-              onClick={() => setShowFullDescription(!showFullDescription)}
-              className="text-blue-600 hover:text-bluelight mt-2"
+              type="button"
+              onClick={() => setShowFullDescription((value) => !value)}
+              className="text-blue-400 hover:text-bluelight mt-2 underline underline-offset-4"
+              aria-expanded={showFullDescription}
             >
-              {showFullDescription ? "Show Less" : "Show More"}
+              {showFullDescription ? "Ringkas" : "Tampilkan semua"}
             </button>
           )}
         </div>
 
         <div className="mt-auto">
-          <a
-            href={storeLink}
-            target="_blank"
-            className="relative inline-block w-full items-center justify-start px-6 py-3 overflow-hidden font-medium transition-all bg-light1 rounded-lg hover:bg-bluesea group disabled:opacity-50 disabled:cursor-not-allowed text-center"
-          >
-            <span className="w-48 h-48 rounded rotate-[-40deg] bg-bluesea absolute bottom-0 left-0 -translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
-            <span className="relative w-full text-black transition-colors duration-300 ease-in-out group-hover:text-light1">
-              {textStore}
-            </span>
-          </a>
+          {storeLink ? (
+            <a
+              href={storeLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative inline-block w-full items-center justify-start px-6 py-3 overflow-hidden font-medium transition-all bg-light1 rounded-lg hover:bg-bluesea group text-center"
+            >
+              <span className="w-48 h-48 rounded rotate-[-40deg] bg-bluesea absolute bottom-0 left-0 -translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
+              <span className="relative w-full text-black transition-colors duration-300 ease-in-out group-hover:text-light1">
+                {textStore || "Cari di toko online"}
+              </span>
+            </a>
+          ) : (
+            <p className="text-center text-sm text-light1/40">
+              Tautan pembelian belum tersedia untuk buku ini.
+            </p>
+          )}
         </div>
       </div>
       {!isRevealed && (
-        <div className="absolute inset-0 bg-dark1/80 flex items-center justify-center rounded-lg z-2 border-2 border-light1/5">
+        <div className="absolute inset-0 bg-dark1/80 flex items-center justify-center rounded-lg z-20 border-2 border-light1/5">
           <button
+            type="button"
             onClick={() => setIsRevealed(true)}
             className="px-8 py-3 bg-dark1/70 hover:bg-dark1/80 border border-gray-700 rounded-lg text-white font-normal shadow-md backdrop-blur-sm transition-all duration-300 hover:scale-105 w-1/2"
           >
