@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+const YEARS = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017];
+
 const YearDropdown = ({ selectedYear, onYearChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -11,11 +13,23 @@ const YearDropdown = ({ selectedYear, onYearChange }) => {
       }
     };
 
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
-  const years = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017];
+  const select = (value) => {
+    onYearChange(value);
+    setIsOpen(false);
+  };
 
   return (
     <div className="w-full max-w-sm min-w-[200px]" ref={dropdownRef}>
@@ -25,8 +39,11 @@ const YearDropdown = ({ selectedYear, onYearChange }) => {
       <div className="relative">
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="bg-gray-700 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 text-left flex justify-between items-center dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+          onClick={() => setIsOpen((open) => !open)}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-label={`Filter tahun, sekarang: ${selectedYear || "semua tahun"}`}
+          className="bg-gray-700 border border-gray-300 text-light1 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 text-left flex justify-between items-center"
         >
           <span>{selectedYear || "Semua tahun"}</span>
           <svg
@@ -36,6 +53,7 @@ const YearDropdown = ({ selectedYear, onYearChange }) => {
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -47,25 +65,31 @@ const YearDropdown = ({ selectedYear, onYearChange }) => {
         </button>
 
         {isOpen && (
-          <div className="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-300 rounded-lg shadow-lg dark:bg-gray-700 dark:border-gray-600">
+          <div
+            role="listbox"
+            aria-label="Pilih tahun"
+            className="absolute z-20 w-full mt-1 bg-gray-700 border border-gray-300 rounded-lg shadow-lg"
+          >
             <div className="max-h-60 overflow-y-auto">
               <button
-                className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white"
-                onClick={() => {
-                  onYearChange("");
-                  setIsOpen(false);
-                }}
+                type="button"
+                role="option"
+                aria-selected={!selectedYear}
+                className="w-full px-4 py-2 text-sm text-left hover:bg-gray-600 text-light1"
+                onClick={() => select("")}
               >
                 Semua tahun
               </button>
-              {years.map((year) => (
+              {YEARS.map((year) => (
                 <button
                   key={year}
-                  className="w-full px-4 py-2 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-white"
-                  onClick={() => {
-                    onYearChange(year.toString());
-                    setIsOpen(false);
-                  }}
+                  type="button"
+                  role="option"
+                  aria-selected={String(year) === selectedYear}
+                  className={`w-full px-4 py-2 text-sm text-left hover:bg-gray-600 text-light1 ${
+                    String(year) === selectedYear ? "font-semibold" : ""
+                  }`}
+                  onClick={() => select(year.toString())}
                 >
                   {year}
                 </button>
@@ -79,7 +103,8 @@ const YearDropdown = ({ selectedYear, onYearChange }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"
-          className="w-5 h-5 mr-2"
+          className="w-5 h-5 mr-2 shrink-0"
+          aria-hidden="true"
         >
           <path
             fillRule="evenodd"

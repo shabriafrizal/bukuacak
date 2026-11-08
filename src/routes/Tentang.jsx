@@ -1,6 +1,14 @@
+import Seo from "../Seo";
+
 function Tentang() {
   return (
     <section className="container mx-auto p-5 mt-20">
+      <Seo
+        title="Tentang"
+        description="Kenali Bukuacak: aplikasi web open-source untuk menemukan buku baru secara acak, lengkap dengan API gratis untuk pengembang."
+        path="/tentang"
+        keywords={["tentang bukuacak", "open source buku", "api buku gratis"]}
+      />
       <div>
         <div className="max-w-4xl mx-auto">
           <h1 className="font-semibold text-3xl mb-2">Tentang</h1>
@@ -23,10 +31,14 @@ function Tentang() {
           <h2 className="text-2xl font-semibold text-light1 mt-8 mb-4">
             Fitur Utama
           </h2>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside space-y-2">
             <li className="text-light1/50">
               <strong>Pencarian Buku Secara Acak:</strong> Klik satu tombol, dan
               dapatkan rekomendasi buku yang menarik.
+            </li>
+            <li className="text-light1/50">
+              <strong>Filter Lengkap:</strong> Saring koleksi berdasarkan genre,
+              tahun terbit, kata kunci, dan urutan tampil.
             </li>
             <li className="text-light1/50">
               <strong>API Gratis:</strong> Pengembang dapat mengakses API kami
@@ -39,10 +51,10 @@ function Tentang() {
           </h2>
           <p className="text-light1/50 leading-relaxed text-justify">
             Buku kami didapatkan secara daring melalui Search Engine di berbagai
-            Publisher Buku dan Perorangan.{" "}
-            <p className="text-light1/20 font-thin italic">
-              (untuk sekarang hanya Gramedia)
-            </p>
+            Publisher Buku dan Perorangan.
+          </p>
+          <p className="text-light1/20 font-thin italic">
+            (untuk sekarang hanya Gramedia)
           </p>
 
           <h2 className="text-2xl font-semibold text-light1 mt-8 mb-4">
@@ -76,8 +88,9 @@ function Tentang() {
           <div className="flex justify-center mt-12">
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/shabriafrizal/bukuacak"
-              className="relative inline-flex items-center justify-start px-6 py-3 overflow-hidden font-medium transition-all bg-light1 rounded-lg hover:bg-bluesea group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative inline-flex items-center justify-start px-6 py-3 overflow-hidden font-medium transition-all bg-light1 rounded-lg hover:bg-bluesea group"
             >
               <span className="w-48 h-48 rounded rotate-[-40deg] bg-bluesea absolute bottom-0 left-0 -translate-x-full ease-out duration-500 transition-all translate-y-full mb-9 ml-9 group-hover:ml-0 group-hover:mb-32 group-hover:translate-x-0"></span>
               <span className="relative min-w-[250px] md:min-w-[650px] lg:min-w-[800px] text-black transition-colors duration-300 ease-in-out group-hover:text-light1 text-center">

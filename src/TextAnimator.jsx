@@ -1,4 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+
+// Even a long summary should finish animating quickly; the effect is a
+// decoration, not something readers should wait for.
+const MAX_ANIMATION_MS = 2500;
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  typeof window.matchMedia === "function" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const TextAnimator = ({
   text = "Your text here",
@@ -8,53 +17,82 @@ const TextAnimator = ({
   maxWidth = "full",
   className = "",
 }) => {
-  const [words, setWords] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(0);
   const [calculatedHeight, setCalculatedHeight] = useState(null);
-  const containerRef = useRef(null);
   const hiddenRef = useRef(null);
 
   // Split text into paragraphs, then words, and add metadata
-  const paragraphs = text
-    .split("\n")
-    .map((para) => para.trim())
-    .filter(Boolean);
-  const allWords = paragraphs
-    .map((para, paraIndex) => {
-      return para.split(" ").map((word, wordIndex) => ({
-        text: word,
-        key: `p${paraIndex}-w${wordIndex}`,
-        isLastInParagraph: wordIndex === para.split(" ").length - 1,
-        paragraphIndex: paraIndex,
-      }));
-    })
-    .flat();
+  const paragraphs = useMemo(
+    () =>
+      String(text || "")
+        .split("\n")
+        .map((para) => para.trim())
+        .filter(Boolean),
+    [text]
+  );
 
-  // Pre-render the hidden content and calculate its height
+  const allWords = useMemo(
+    () =>
+      paragraphs
+        .map((para, paraIndex) => {
+          const words = para.split(" ");
+          return words.map((word, wordIndex) => ({
+            text: word,
+            key: `p${paraIndex}-w${wordIndex}`,
+            isLastInParagraph: wordIndex === words.length - 1,
+            paragraphIndex: paraIndex,
+          }));
+        })
+        .flat(),
+    [paragraphs]
+  );
+
+  // Pre-render the hidden content and calculate its height, so the visible
+  // block does not jump while words fade in.
   useEffect(() => {
     if (hiddenRef.current) {
       setCalculatedHeight(hiddenRef.current.offsetHeight);
     }
+  }, [text, maxWidth, lineHeight, justify, className]);
+
+  // Restart when the text changes
+  useEffect(() => {
+    setVisibleCount(0);
   }, [text]);
 
-  // Incrementally display words at the given speed
+  // Step through the words at the given speed, never exceeding MAX_ANIMATION_MS
   useEffect(() => {
-    if (words.length < allWords.length) {
-      const timer = setTimeout(() => {
-        setWords((prev) => [...prev, allWords[prev.length]]);
-      }, speed);
+    if (visibleCount >= allWords.length) return undefined;
 
-      return () => clearTimeout(timer);
+    if (prefersReducedMotion()) {
+      setVisibleCount(allWords.length);
+      return undefined;
     }
-  }, [words, allWords, speed]);
 
-  // Group words by paragraph for rendering
-  const wordsByParagraph = words.reduce((acc, word) => {
-    if (!acc[word.paragraphIndex]) {
-      acc[word.paragraphIndex] = [];
-    }
-    acc[word.paragraphIndex].push(word);
-    return acc;
-  }, {});
+    const step =
+      allWords.length === 0
+        ? speed
+        : Math.max(4, Math.min(speed, MAX_ANIMATION_MS / allWords.length));
+
+    const timer = setTimeout(() => {
+      setVisibleCount((count) => count + 1);
+    }, step);
+
+    return () => clearTimeout(timer);
+  }, [allWords.length, speed, visibleCount]);
+
+  // Group visible words by paragraph for rendering
+  const wordsByParagraph = useMemo(
+    () =>
+      allWords.slice(0, visibleCount).reduce((acc, word) => {
+        if (!acc[word.paragraphIndex]) {
+          acc[word.paragraphIndex] = [];
+        }
+        acc[word.paragraphIndex].push(word);
+        return acc;
+      }, {}),
+    [allWords, visibleCount]
+  );
 
   const lineHeightClasses = {
     tight: "leading-tight",
@@ -75,78 +113,46 @@ const TextAnimator = ({
     full: "max-w-full",
   };
 
+  const widthClass = maxWidthClasses[maxWidth] || "max-w-2xl";
+  const bodyClass = `text-lg ${justify ? "text-justify" : "text-left"} ${
+    lineHeightClasses[lineHeight] || "leading-normal"
+  } ${className}`;
+
   return (
-    <>
+    <div className="relative">
       {/* Hidden container for calculating height */}
       <div
         ref={hiddenRef}
-        className={`p-4 invisible absolute ${
-          maxWidthClasses[maxWidth] || "max-w-2xl"
-        }`}
+        aria-hidden="true"
+        className={`invisible absolute inset-x-0 top-0 p-4 ${widthClass}`}
       >
         {paragraphs.map((para, paraIndex) => (
-          <p
-            key={`hidden-para-${paraIndex}`}
-            className={`text-lg ${justify ? "text-justify" : "text-left"} ${
-              lineHeightClasses[lineHeight] || "leading-normal"
-            } ${className}`}
-          >
+          <p key={`hidden-para-${paraIndex}`} className={bodyClass}>
             {para}
           </p>
         ))}
       </div>
 
-      {/* Visible container with fixed height */}
+      {/* Visible container with reserved height */}
       <div
-        ref={containerRef}
-        style={{
-          minHeight: calculatedHeight ? `${calculatedHeight}px` : "auto",
-          overflow: "hidden",
-        }}
-        className={`p-4 rounded-lg ${
-          maxWidthClasses[maxWidth] || "max-w-2xl"
-        } mx-auto`}
+        style={{ minHeight: calculatedHeight ? `${calculatedHeight}px` : "auto" }}
+        className={`p-4 rounded-lg ${widthClass} mx-auto`}
       >
         {Object.entries(wordsByParagraph).map(([paraIndex, paraWords]) => (
           <p
             key={`para-${paraIndex}`}
-            className={`text-lg ${justify ? "text-justify" : "text-left"} ${
-              lineHeightClasses[lineHeight] || "leading-normal"
-            } ${className} ${Number(paraIndex) > 0 ? "mt-4" : ""}`}
+            className={`${bodyClass} ${Number(paraIndex) > 0 ? "mt-4" : ""}`}
           >
-            {paraWords.map((word, index) => (
-              <React.Fragment key={word.key}>
-                <span
-                  className="inline-block opacity-0 animate-fadeIn"
-                  style={{
-                    animation: "fadeIn 0.5s ease-in forwards",
-                  }}
-                >
-                  {word.text}
-                </span>
+            {paraWords.map((word) => (
+              <Fragment key={word.key}>
+                <span className="inline-block animate-fadeIn">{word.text}</span>
                 {!word.isLastInParagraph && " "}
-              </React.Fragment>
+              </Fragment>
             ))}
           </p>
         ))}
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-in forwards;
-        }
-      `}</style>
-    </>
+    </div>
   );
 };
 
